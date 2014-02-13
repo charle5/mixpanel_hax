@@ -1129,18 +1129,30 @@ Globals should be all caps
 
     _.info = {
         campaignParams: function() {
-            var campaign_keywords = 'utm_source utm_medium utm_campaign utm_content utm_term'.split(' ')
-                , kw = ''
-                , params = {};
-            _.each(campaign_keywords, function(kwkey) {
-                kw = _.getQueryParam(document.URL, kwkey);
-                if (kw.length) {
-                    params[kwkey] = kw;
-                }
-            });
-
+            var campaign_keywords = {
+                'utm_source'  : ['utm_source','aw_source'],
+                'utm_medium'  : ['utm_medium','aw_medium'],
+                'utm_campaign': ['utm_campaign','aw_campaign'],
+                'utm_content' : ['utm_content','aw_content'],
+                'utm_term'    : ['utm_term','aw_term']
+            }
+	    ,  kw = ''
+            ,  params = {};
+	    hsh_len = Object.keys(campaign_keywords).length;
+            for (i = 0; i < hsh_len; i++) {
+		hsh_val = Object.keys(campaign_keywords)[i];
+		arr_len = campaign_keywords[Object.keys(campaign_keywords)[i]].length;
+	        for (j = 0; j < arr_len; j++) {
+		    arr_val = campaign_keywords[Object.keys(campaign_keywords)[i]][j];
+                    kw = _.getQueryParam(document.URL, arr_val);
+                    if (kw.length) {
+			params[hsh_val] = kw;
+                    }
+		}
+	    }
             return params;
-        },
+
+	},
 
         searchEngine: function(referrer) {
             if (referrer.search('https?://(.*)google.([^/?]*)') === 0) {
