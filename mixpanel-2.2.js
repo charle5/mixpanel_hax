@@ -1128,16 +1128,35 @@ Globals should be all caps
     })();
 
     _.info = {
+	// this function was modified to permit adwords users to manually tag destination URLs
+	// with non-utm-prefixed utm params, pass and capture ValueTrack params such as search
+	// keyword, and it also opens the door to more granular performance analysis by adding params
+	// such as ad_group, ad_position, and more.
+	// [todo]: consider adding CTAs, and work on taxonomy for A/B MVT in ads and LPs.
+	// ^ impact analysis on variations in 'presentation' on subsequent behavior
+	// [todo]: consider new method for multi-touch attribution. (register_once won't work)
+	// ^ H_{0}: reveal buying cycle behavior and use to create more relevant/helpful info
         campaignParams: function() {
+	    // campaign_keywords was changed to a hash to accommodate multiple values for each
+	    // key. this seemed necessary to maintain standard utm nomenclature for
+	    // non-utm-prefixed params in adwords' destination URLs.
             var campaign_keywords = {
-                'utm_source'  : ['utm_source','aw_source'],
-                'utm_medium'  : ['utm_medium','aw_medium'],
-                'utm_campaign': ['utm_campaign','aw_campaign'],
-                'utm_content' : ['utm_content','aw_content'],
-                'utm_term'    : ['utm_term','aw_term']
+                'utm_source'  : ['utm_source','aw_source'],     // e.g. google, facebook, etc.
+                'utm_medium'  : ['utm_medium','aw_medium'],     // e.g. cpc, ppc, socialmedia, etc.
+                'utm_campaign': ['utm_campaign','aw_campaign'], // name of ad campaign
+                'ad_group'    : ['aw_group'],                   // name of ad group
+		'creative_id' : ['aw_creative'],                // ad creative ID VT: {creative}
+		'placement'   : ['aw_placement'],               // domain (GCN) VT: {placement}
+		'target'      : ['aw_target'],                  // placement category (GCN) VT: {target}
+		'ad_position' : ['aw_adposition'],              // ad position in search VT: {adposition}
+                'utm_content' : ['utm_content','aw_content'],   // too broadly defined for me now
+                'utm_term'    : ['utm_term','aw_term']          // search kw VT: {keyword}
             }
 	    ,  kw = ''
             ,  params = {};
+	    // to parse URL params defined in campaign_keywords we iterate through each key and all
+	    // of its values, and pass each value to getQueryParam, which assigns the value of any
+	    // corresponding URL param to the kw variable.
 	    hsh_len = Object.keys(campaign_keywords).length;
             for (i = 0; i < hsh_len; i++) {
 		hsh_val = Object.keys(campaign_keywords)[i];
@@ -1150,6 +1169,7 @@ Globals should be all caps
                     }
 		}
 	    }
+	    // this is what goes to register_once.
             return params;
 
 	},
