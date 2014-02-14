@@ -3,18 +3,18 @@ mixpanel_hax
 
 for testing out mixpanel stuffs  
 
-# read me #  
+# read me  
 
 * mixpanel **does not** recommend this approach.
 * released under MIT license.  
 * i make no warranty as to the fitness of this code.
 * [insert other obgligatory preamble here later]  
 
-# status #  
+# status  
 
 the code works in a dev environment with manually passed URL params. next step is to set live on the web, set up corresponding test campaign, view, and project in adwords, GA, and mixpanel, respectively, and see if everything works with ad clicks containing non-utm-prefixed destination URL params as well as dynamically inserted VT params.  
 
-# background #  
+# background  
 
 i'm testing this out b/c i want to find a way to get adwords, GA, and mixpanel to play nicely togetner. what do i mean by this?  
 
@@ -26,7 +26,7 @@ we *could* use non-utm-prefixed params in destination URLs and register correspo
 
 an aside: like us you may want to automate tracking of dynamic performance-related data such as search keywords, search ad position, display URL (etc.). see goog's documentation on ValueTrack and read the test code here to see how to implement.
 
-# solution #  
+# solution  
 
 to note: mixpanel advises against forking their code and self-hosting (for some good reasons) so we'll look into taking this functionality out and placing it in our code.  
 
